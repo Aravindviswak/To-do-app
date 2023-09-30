@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ToDoApp.entity.ToDoEntity;
+import com.ToDoApp.exception.DetailsNotFound;
 import com.ToDoApp.exception.NoSuchElementException;
 import com.ToDoApp.service.ToDoServiceInterface;
 
@@ -55,5 +56,11 @@ public class ToDoController {
 		
 		return "To do item deleted sucessfully";
 	}
+	
+	@GetMapping("/completedtodolist")
+	public List<ToDoEntity>getCompletedToDolist() throws DetailsNotFound{
+		return service.getCompletedToDolist();
+	}
+	
 	
 }
