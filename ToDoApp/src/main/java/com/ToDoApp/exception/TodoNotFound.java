@@ -1,8 +1,8 @@
 package com.ToDoApp.exception;
 
-public class DetailsNotFound extends Exception {
+public class TodoNotFound extends Exception {
 
-	public DetailsNotFound(String message) {
+	public TodoNotFound(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}

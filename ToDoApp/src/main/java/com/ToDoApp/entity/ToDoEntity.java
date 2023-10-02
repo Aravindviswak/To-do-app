@@ -41,6 +41,7 @@ public class ToDoEntity {
 
     @Column(name = "iscomplete")
     private boolean complete;
+    
     @NotBlank(message = "Title is Required")
     private String title;
 	

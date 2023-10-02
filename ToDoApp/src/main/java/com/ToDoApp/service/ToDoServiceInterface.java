@@ -3,7 +3,7 @@ package com.ToDoApp.service;
 import java.util.List;
 
 import com.ToDoApp.entity.ToDoEntity;
-import com.ToDoApp.exception.DetailsNotFound;
+import com.ToDoApp.exception.TodoNotFound;
 import com.ToDoApp.exception.NoSuchElementException;
 
 public interface ToDoServiceInterface {
@@ -18,7 +18,9 @@ public interface ToDoServiceInterface {
 
 	void DeleteToDoById(Long id);
 
-	List<ToDoEntity> getCompletedToDolist() throws DetailsNotFound;
+	List<ToDoEntity> getCompletedToDolist() throws TodoNotFound;
+
+	List<ToDoEntity> getUnCompletedTodos() throws TodoNotFound;
 
 	
 
