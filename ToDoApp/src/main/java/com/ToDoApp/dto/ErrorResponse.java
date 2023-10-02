@@ -17,6 +17,6 @@ public class ErrorResponse {
     private int status;
     private String error;
     private String displayMessage;
-    private Map<String, String> errorMessages;
+    private Map<String, String> errorMessages; 
     
 }
