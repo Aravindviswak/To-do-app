@@ -20,6 +20,8 @@ public interface ToDoServiceInterface {
 
 	List<ToDoEntity> getCompletedToDolist() throws DetailsNotFound;
 
+	List<ToDoEntity> pendingToDoList() throws DetailsNotFound;
+
 	
 
 }

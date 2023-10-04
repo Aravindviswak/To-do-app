@@ -70,14 +70,16 @@ public class ToDoService implements ToDoServiceInterface {
 	public List<ToDoEntity> getCompletedToDolist() throws DetailsNotFound {
 		List<ToDoEntity> data=repository.findAll();
 		
-		List<ToDoEntity> completedTasks = new ArrayList<>();
+		List<ToDoEntity> completedTasks = data.stream()
+				.filter(todo->todo.isComplete())
+				.collect(Collectors.toList());
 		
-		for(ToDoEntity details:data) {
-			if(details.isComplete()) {
-				completedTasks.add(details);
-			}
-			
-		}
+//		for(ToDoEntity details:data) {
+//			if(details.isComplete()) {
+//				completedTasks.add(details);
+//			}
+//			
+//		}
 		if(!completedTasks.isEmpty()) {
 			return completedTasks;
 		}
@@ -92,6 +94,32 @@ public class ToDoService implements ToDoServiceInterface {
 //		else {
 //			throw new DetailsNotFound("No Completed Todo Items");
 //		}
+		
+	}
+
+	@Override
+	public List<ToDoEntity> pendingToDoList() throws DetailsNotFound {
+		List<ToDoEntity> data=repository.findAll();
+		List<ToDoEntity> pending=data.stream()
+				.filter(todo->!todo.isComplete())
+				.collect(Collectors.toList());
+		
+		
+		
+		
+//		for(ToDoEntity details:data) {
+//			if(details.isComplete()==false) {
+//			 pending.add(details);
+//			}
+//			
+//		}
+		if(!pending.isEmpty()) {
+			return pending;
+		}
+		else {
+			throw new DetailsNotFound("No Completed Todo Items");
+		}
+		
 		
 	}
 

@@ -62,5 +62,9 @@ public class ToDoController {
 		return service.getCompletedToDolist();
 	}
 	
+	@GetMapping("/pendingTodo")
+	public List<ToDoEntity> pendingToDoList() throws DetailsNotFound{
+		return service.pendingToDoList();
+	}
 	
 }
