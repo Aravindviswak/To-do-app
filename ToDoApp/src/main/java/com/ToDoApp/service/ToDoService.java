@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ToDoApp.dao.ToDoDAO;
+import com.ToDoApp.dto.TodoDto;
 import com.ToDoApp.entity.ToDoEntity;
 import com.ToDoApp.exception.TodoNotFound;
 
@@ -47,23 +48,23 @@ public class ToDoService implements ToDoServiceInterface {
 		}
 		
 	}
-
-	@Override
-	public ToDoEntity updateToDoDetails(Long id, ToDoEntity entity) throws NoSuchElementException {
-		ToDoEntity data=repository.findById(id).orElse(null);
-		if(data!=null) {
-			data.setTitle(entity.getTitle());
-			data.setDueDate(entity.getDueDate());
-			data.setDescription(entity.getDescription());
-			data.setComplete(entity.isComplete());
-			
-			return repository.save(data);
-		}
-		else {
-			throw new NoSuchElementException("Todo item not found with the ID  "+id);
-		}
-	
-	}
+//
+//	@Override
+//	public ToDoEntity updateToDoDetails(Long id, ToDoEntity entity) throws NoSuchElementException {
+//		ToDoEntity data=repository.findById(id).orElse(null);
+//		if(data!=null) {
+//			data.setTitle(entity.getTitle());
+//			data.setDueDate(entity.getDueDate());
+//			data.setDescription(entity.getDescription());
+//			data.setComplete(entity.isComplete());
+//			
+//			return repository.save(data);
+//		}
+//		else {
+//			throw new NoSuchElementException("Todo item not found with the ID  "+id);
+//		}
+//	
+//	}
 
 	@Override
 	public void DeleteToDoById(Long id) {
@@ -123,6 +124,32 @@ public class ToDoService implements ToDoServiceInterface {
 			throw new NoSuchElementException("Todo item not found with the ID  "+id);
 		}
 		
+	}
+
+	@Override
+	public TodoDto updateToDoDetails(Long id, TodoDto entity) throws NoSuchElementException {
+		ToDoEntity data=this.getTodoById(id);
+		
+		if(data!=null) {
+			if(entity.getTitle()!=null) {
+				data.setTitle(entity.getTitle());
+			}
+			if(entity.getDescription()!=null) {
+				data.setDescription(entity.getDescription());
+			}
+			
+			data.setComplete(entity.isComplete());
+			if(entity.getDueDate()!=null) {
+				data.setDueDate(entity.getDueDate());
+			}
+			
+			 repository.save(data);
+			
+			
+			return entity;
+			
+		}
+		return null;
 	}
 
 

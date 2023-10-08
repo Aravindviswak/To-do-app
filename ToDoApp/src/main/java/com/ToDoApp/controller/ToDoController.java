@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ToDoApp.dto.TodoDto;
 import com.ToDoApp.entity.ToDoEntity;
 import com.ToDoApp.exception.TodoNotFound;
 import com.ToDoApp.exception.NoSuchElementException;
@@ -31,32 +32,7 @@ public class ToDoController {
 	
 	@Autowired
 	private ToDoServiceInterface service;
-	
-
-//	@PostMapping("/savedetails")
-//	public ResponseEntity<ToDoEntity> saveTodoDetails( @Valid @RequestBody ToDoEntity entity){
-//		return new ResponseEntity<ToDoEntity>(service.saveTodoDetails(entity),HttpStatus.CREATED);
-//	}
-//	
-//	@GetMapping("/getalldetails")
-//	public List<ToDoEntity>getAllToDoDetails(){
-//		return service.getAllToDoDetails();
-//	}
-//	
-//
-//	
-//	@PutMapping("/updatetodo/{id}")
-//	public ToDoEntity updateToDoDetails(@PathVariable Long id, @RequestBody ToDoEntity entity) throws NoSuchElementException {
-//		return service.updateToDoDetails(id,entity);
-//	}
-//	
-//	@DeleteMapping("/deletetodo/{id}")
-//	public String DeleteToDoById(@PathVariable Long id) {
-//		service.DeleteToDoById(id);
-//		
-//		return "To do item deleted sucessfully";
-//	}
-//	
+		
 	@GetMapping("/completedtodolist")
 	public List<ToDoEntity>getCompletedToDolist() throws TodoNotFound{
 		return service.getCompletedToDolist();
@@ -79,7 +55,7 @@ public class ToDoController {
     }
     
     @PutMapping("/{id}")
-    public ToDoEntity updateTodo(@PathVariable Long id, @RequestBody ToDoEntity entity) throws NoSuchElementException {
+    public TodoDto updateTodo(@PathVariable Long id, @RequestBody TodoDto entity) throws NoSuchElementException {
         return service.updateToDoDetails(id, entity);
     }
     
