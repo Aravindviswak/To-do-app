@@ -1,15 +1,20 @@
 package com.ToDoApp.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ToDoApp.dao.ToDoDAO;
 import com.ToDoApp.entity.ToDoEntity;
-import com.ToDoApp.exception.DetailsNotFound;
+import com.ToDoApp.exception.TodoNotFound;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
+
 import com.ToDoApp.exception.NoSuchElementException;
 
 @Service
@@ -27,7 +32,6 @@ public class ToDoService implements ToDoServiceInterface {
 
 	@Override
 	public List<ToDoEntity> getAllToDoDetails() {
-		// TODO Auto-generated method stub
 		return repository.findAll();
 	}
 
@@ -67,63 +71,59 @@ public class ToDoService implements ToDoServiceInterface {
 	}
 
 	@Override
-	public List<ToDoEntity> getCompletedToDolist() throws DetailsNotFound {
-		List<ToDoEntity> data=repository.findAll();
+	public List<ToDoEntity> getCompletedToDolist() throws TodoNotFound {
+		//Method is created inside DAO.
+		List<ToDoEntity> completedTasks = repository.findByComplete(true);
+	    if(completedTasks.isEmpty()) {
+	        throw new TodoNotFound("No Completed Todo Items");
+	    }
+	    return completedTasks;
 		
-		List<ToDoEntity> completedTasks = data.stream()
-				.filter(todo->todo.isComplete())
-				.collect(Collectors.toList());
-		
-//		for(ToDoEntity details:data) {
-//			if(details.isComplete()) {
-//				completedTasks.add(details);
-//			}
-//			
-//		}
-		if(!completedTasks.isEmpty()) {
-			return completedTasks;
-		}
-		else {
-			throw new DetailsNotFound("No Completed Todo Items");
-		}
-		
-//		ToDoEntity entity=new ToDoEntity();
-//		if(entity.isComplete()==true) {
-//			return data;
-//		}
-//		else {
-//			throw new DetailsNotFound("No Completed Todo Items");
-//		}
+
+	}
+	
+	@Override
+	public List<ToDoEntity> getUnCompletedTodos() throws TodoNotFound {
+		//Method is created inside DAO.
+		List<ToDoEntity> completedTasks = repository.findByComplete(false);
+	    if(completedTasks.isEmpty()) {
+	        throw new TodoNotFound("No Completed Todo Items");
+	    }
+	    return completedTasks;
+
 		
 	}
 
 	@Override
-	public List<ToDoEntity> pendingToDoList() throws DetailsNotFound {
-		List<ToDoEntity> data=repository.findAll();
-		List<ToDoEntity> pending=data.stream()
-				.filter(todo->!todo.isComplete())
-				.collect(Collectors.toList());
-		
-		
-		
-		
-//		for(ToDoEntity details:data) {
-//			if(details.isComplete()==false) {
-//			 pending.add(details);
-//			}
-//			
-//		}
-		if(!pending.isEmpty()) {
-			return pending;
+	public ToDoEntity changeComplete(Long id) throws NoSuchElementException {
+		ToDoEntity entity= new ToDoEntity() ;
+		Set<ConstraintViolation<ToDoEntity>> violations = Validation
+	                .buildDefaultValidatorFactory()
+	                .getValidator()
+	                .validate(entity);
+
+	        if (!violations.isEmpty()) {
+	            // Handle validation errors here
+	            throw new ConstraintViolationException(violations);
+	        }
+	        if (entity.getDueDate() == null || entity.getDescription() == null || entity.getTitle() == null) {
+	            throw new IllegalArgumentException("Due date, description, and title are required fields.");
+	        }
+		Optional<ToDoEntity> data=repository.findById(id);
+		if(data.isPresent()) {
+			ToDoEntity details=data.get();
+			details.setTitle(details.getTitle());
+			details.setDueDate(details.getDueDate());
+			details.setDescription(details.getDescription());
+
+			details.setComplete(!details.isComplete());
+			return repository.save(details);
 		}
 		else {
-			throw new DetailsNotFound("No Completed Todo Items");
+			throw new NoSuchElementException("Todo item not found with the ID  "+id);
 		}
 		
-		
 	}
-
-
 
 
 	
