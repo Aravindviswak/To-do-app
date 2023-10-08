@@ -22,7 +22,9 @@ public interface ToDoServiceInterface {
 
 	List<ToDoEntity> getUnCompletedTodos() throws TodoNotFound;
 
-	List<ToDoEntity> pendingToDoList() throws DetailsNotFound;
+	ToDoEntity changeComplete(Long id) throws NoSuchElementException;
+
+//	List<ToDoEntity> pendingToDoList() throws DetailsNotFound;
 
 	
 

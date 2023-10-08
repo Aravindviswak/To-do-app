@@ -36,6 +36,8 @@ public class ToDoExceptionHandle {
 		return new ResponseEntity<ErrorResponse>(errorResponse, status);
 	}
 
+	
+		
 	@ExceptionHandler(TodoNotFound.class)
 	public ResponseEntity<ErrorResponse> handleTodoNotFound(TodoNotFound ex) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
